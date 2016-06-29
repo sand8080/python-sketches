@@ -30,7 +30,7 @@ def extract_key_paths(base_path, collection):
         return None
 
 
-def collect_all_paths(collection):
+def extract_all_paths(collection):
     """Extracts all paths to leaf elements of collection.
 
     In case of {'a': {'b': 1}} result will be [['a', 'b']]

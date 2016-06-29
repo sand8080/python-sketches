@@ -49,27 +49,27 @@ class TestKeysPathsFinding(unittest2.TestCase):
         )
 
     def test_collect_all_paths(self):
-        self.assertItemsEqual([], cu.collect_all_paths([]))
+        self.assertItemsEqual([], cu.extract_all_paths([]))
         self.assertItemsEqual([
             [0], [1], [2], [3, 0]],
-            cu.collect_all_paths([1, [], {}, [1]])
+            cu.extract_all_paths([1, [], {}, [1]])
         )
-        self.assertItemsEqual([], cu.collect_all_paths([]))
+        self.assertItemsEqual([], cu.extract_all_paths([]))
         self.assertItemsEqual(
             [['a'], ['b'], ['c', 'd']],
-            cu.collect_all_paths({'a': {}, 'b': [], 'c': {'d': 1}})
+            cu.extract_all_paths({'a': {}, 'b': [], 'c': {'d': 1}})
         )
         self.assertItemsEqual(
             [['a'], ['b'], ['c', 'd']],
-            cu.collect_all_paths({'a': 1, 'b': 2, 'c': {'d': 3}})
+            cu.extract_all_paths({'a': 1, 'b': 2, 'c': {'d': 3}})
         )
-        self.assertItemsEqual([[0]], cu.collect_all_paths({0: None}))
-        self.assertItemsEqual([[0], [1]], cu.collect_all_paths((1, 2)))
+        self.assertItemsEqual([[0]], cu.extract_all_paths({0: None}))
+        self.assertItemsEqual([[0], [1]], cu.extract_all_paths((1, 2)))
         self.assertItemsEqual(
             [[0], [1, 'a'], [1, 'b', 0]],
-            cu.collect_all_paths((1, {'a': 1, 'b': [2]}))
+            cu.extract_all_paths((1, {'a': 1, 'b': [2]}))
         )
         self.assertItemsEqual(
             [['a'], ['b', 0]],
-            cu.collect_all_paths({'a': 1, 'b': (2,)})
+            cu.extract_all_paths({'a': 1, 'b': (2,)})
         )
