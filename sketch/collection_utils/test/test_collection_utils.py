@@ -9,6 +9,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import copy
 
 import unittest2
 
@@ -73,3 +74,71 @@ class TestKeysPathsFinding(unittest2.TestCase):
             [['a'], ['b', 0]],
             cu.extract_all_paths({'a': 1, 'b': (2,)})
         )
+
+    def test_filter_collection(self):
+        self.assertEqual([], cu.filter_collection([]))
+        self.assertEqual((), cu.filter_collection(()))
+        self.assertEqual({}, cu.filter_collection({}))
+        self.assertItemsEqual([1, 2, 3], cu.filter_collection([1, 2, 3]))
+        self.assertItemsEqual((1, 2, 3), cu.filter_collection((1, 2, 3)))
+        self.assertEqual(
+            {'a': 1, 'b': 2},
+            cu.filter_collection({'a': 1, 'b': 2})
+        )
+
+        self.assertEqual(
+            {'a': {}},
+            cu.filter_collection({'a': {'b': 1}}, filter_keys=('b',))
+        )
+        self.assertEqual(
+            {},
+            cu.filter_collection({'a': {'b': 1}}, filter_keys=('a',))
+        )
+        self.assertEqual(
+            [{}],
+            cu.filter_collection([{'a': {'b': 1}}], filter_keys=('a',))
+        )
+        self.assertEqual(
+            ({},),
+            cu.filter_collection(({'a': {'b': 1}},), filter_keys=('a',))
+        )
+
+        self.assertEqual(
+            {'a': {'c': {'e': 3}}},
+            cu.filter_collection(
+                {'a': {'b': {'f': 5}, 'c': {'d': 2, 'e': 3, 'b': 4}}},
+                filter_keys=('d', 'b')
+            )
+        )
+        self.assertEqual(
+            [{'a': {}}, {}, {'a': {'d': 3}}],
+            cu.filter_collection(
+                [{'a': {'b': 1}}, {'b': {'c': 2}}, {'a': {'d': 3, 'b': 4}}],
+                filter_keys=('b',)
+            )
+        )
+
+    def test_filter_collection_modify(self):
+        origin = {'a': {'b': 1, 'c': 2}}
+        expected_not_modified = copy.deepcopy(origin)
+        expected_modified = {'a': {'c': 2}}
+
+        self.assertEqual(
+            expected_modified,
+            cu.filter_collection(
+                origin,
+                filter_keys=('b',),
+                modify_collection=False
+            )
+        )
+        self.assertEqual(expected_not_modified, origin)
+
+        self.assertEqual(
+            expected_modified,
+            cu.filter_collection(
+                origin,
+                filter_keys=('b',),
+                modify_collection=True
+            )
+        )
+        self.assertEqual(expected_modified, origin)

@@ -10,6 +10,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import copy
+
 
 def extract_key_paths(base_path, collection):
     """Extracts key paths for collection and joins with base_path.
@@ -52,3 +54,32 @@ def extract_all_paths(collection):
             paths.extend(new_paths)
         else:
             yield path
+
+
+def filter_collection(collection, filter_keys=(), modify_collection=False):
+    """Removes from collection keys listed in filter_keys
+
+    :param collection: collection to be filtered
+    :param filter_keys: list of keys to be filtered
+    :param modify_collection: modify original collection or not
+    :return: filtered collection
+    """
+
+    result = collection if modify_collection else copy.deepcopy(collection)
+    paths = extract_key_paths([], result)
+    for path in paths:
+        point = result
+        deleted = False
+        for k in path:
+            if isinstance(point, dict) and k in filter_keys:
+                del point[k]
+                deleted = True
+                break
+            point = point[k]
+        if deleted:
+            continue
+        new_paths = extract_key_paths(path, point)
+        if new_paths:
+            paths.extend(new_paths)
+
+    return result
