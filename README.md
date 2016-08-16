@@ -10,6 +10,6 @@ Extracts all key paths for leaf elements. For instase key paths for:
 
 **Iterative implementation of collection filtering**
 
-Filters specified keys from collection:
+Removes specified keys from collection:
 
-`[{'a': {'b': 1}}, {'b': 2}, {'c': {'b': 3, 'd': 4}}] => filter keys: ('b',) => [{'a': {}}, {}, {'c': {'d': 4}}]`
+`[{'a': {'b': 1}}, {'b': 2}, {'c': {'b': 3, 'd': 4}}] => remove keys: ('b',) => [{'a': {}}, {}, {'c': {'d': 4}}]`
