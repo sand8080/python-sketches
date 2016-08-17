@@ -76,45 +76,45 @@ class TestKeysPathsFinding(unittest2.TestCase):
         )
 
     def test_filter_collection(self):
-        self.assertEqual([], cu.filter_collection([]))
-        self.assertEqual((), cu.filter_collection(()))
-        self.assertEqual({}, cu.filter_collection({}))
-        self.assertItemsEqual([1, 2, 3], cu.filter_collection([1, 2, 3]))
-        self.assertItemsEqual((1, 2, 3), cu.filter_collection((1, 2, 3)))
+        self.assertEqual([], cu.remove_from_collection([]))
+        self.assertEqual((), cu.remove_from_collection(()))
+        self.assertEqual({}, cu.remove_from_collection({}))
+        self.assertItemsEqual([1, 2, 3], cu.remove_from_collection([1, 2, 3]))
+        self.assertItemsEqual((1, 2, 3), cu.remove_from_collection((1, 2, 3)))
         self.assertEqual(
             {'a': 1, 'b': 2},
-            cu.filter_collection({'a': 1, 'b': 2})
+            cu.remove_from_collection({'a': 1, 'b': 2})
         )
 
         self.assertEqual(
             {'a': {}},
-            cu.filter_collection({'a': {'b': 1}}, filter_keys=('b',))
+            cu.remove_from_collection({'a': {'b': 1}}, remove_keys=('b',))
         )
         self.assertEqual(
             {},
-            cu.filter_collection({'a': {'b': 1}}, filter_keys=('a',))
+            cu.remove_from_collection({'a': {'b': 1}}, remove_keys=('a',))
         )
         self.assertEqual(
             [{}],
-            cu.filter_collection([{'a': {'b': 1}}], filter_keys=('a',))
+            cu.remove_from_collection([{'a': {'b': 1}}], remove_keys=('a',))
         )
         self.assertEqual(
             ({},),
-            cu.filter_collection(({'a': {'b': 1}},), filter_keys=('a',))
+            cu.remove_from_collection(({'a': {'b': 1}},), remove_keys=('a',))
         )
 
         self.assertEqual(
             {'a': {'c': {'e': 3}}},
-            cu.filter_collection(
+            cu.remove_from_collection(
                 {'a': {'b': {'f': 5}, 'c': {'d': 2, 'e': 3, 'b': 4}}},
-                filter_keys=('d', 'b')
+                remove_keys=('d', 'b')
             )
         )
         self.assertEqual(
             [{'a': {}}, {}, {'a': {'d': 3}}],
-            cu.filter_collection(
+            cu.remove_from_collection(
                 [{'a': {'b': 1}}, {'b': {'c': 2}}, {'a': {'d': 3, 'b': 4}}],
-                filter_keys=('b',)
+                remove_keys=('b',)
             )
         )
 
@@ -125,9 +125,9 @@ class TestKeysPathsFinding(unittest2.TestCase):
 
         self.assertEqual(
             expected_modified,
-            cu.filter_collection(
+            cu.remove_from_collection(
                 origin,
-                filter_keys=('b',),
+                remove_keys=('b',),
                 modify_collection=False
             )
         )
@@ -135,9 +135,9 @@ class TestKeysPathsFinding(unittest2.TestCase):
 
         self.assertEqual(
             expected_modified,
-            cu.filter_collection(
+            cu.remove_from_collection(
                 origin,
-                filter_keys=('b',),
+                remove_keys=('b',),
                 modify_collection=True
             )
         )

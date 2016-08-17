@@ -56,11 +56,12 @@ def extract_all_paths(collection):
             yield path
 
 
-def filter_collection(collection, filter_keys=(), modify_collection=False):
+def remove_from_collection(collection, remove_keys=(),
+                           modify_collection=False):
     """Removes from collection keys listed in filter_keys
 
-    :param collection: collection to be filtered
-    :param filter_keys: list of keys to be filtered
+    :param collection: collection to be cleaned
+    :param remove_keys: list of keys to be removed
     :param modify_collection: modify original collection or not
     :return: filtered collection
     """
@@ -71,7 +72,7 @@ def filter_collection(collection, filter_keys=(), modify_collection=False):
         point = result
         deleted = False
         for k in path:
-            if isinstance(point, dict) and k in filter_keys:
+            if isinstance(point, dict) and k in remove_keys:
                 del point[k]
                 deleted = True
                 break
